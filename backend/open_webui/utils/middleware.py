@@ -832,16 +832,26 @@ async def process_chat_payload(request, form_data, metadata, user, model):
                 ),
                 form_data["messages"],
             )
-            # reformat first user message to include the context
-            RAG_USER_MESSAGE_TEMPLATE = "# The user asked:\n{{QUERY}}\n\n# Reference materials:\n{{CONTEXT}}"
-            for message in form_data["messages"]:
+            # reformat last user message to include the context
+            RAG_USER_MESSAGE_TEMPLATE = (
+                "# The user asked:\n{{QUERY}}\n\n# Reference materials:\n{{CONTEXT}}"
+            )
+            for message in reversed(form_data["messages"]):
                 if message["role"] == "user":
                     if isinstance(message["content"], list):
                         for item in message["content"]:
                             if item["type"] == "text":
-                                item["text"] = rag_template(RAG_USER_MESSAGE_TEMPLATE, context_string, item["text"] )
+                                item["text"] = rag_template(
+                                    RAG_USER_MESSAGE_TEMPLATE,
+                                    context_string,
+                                    item["text"],
+                                )
                     else:
-                        message["content"] = rag_template(RAG_USER_MESSAGE_TEMPLATE, context_string, message["content"])
+                        message["content"] = rag_template(
+                            RAG_USER_MESSAGE_TEMPLATE,
+                            context_string,
+                            message["content"],
+                        )
                     break
 
     # If there are citations, add them to the data_items
