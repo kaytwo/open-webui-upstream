@@ -34,7 +34,7 @@ jobs:
           GH_TOKEN: ${{ secrets.REPO_WRITE_TOKEN }}
         run: |
           git fetch origin main
-          git checkout main
+          git checkout origin/main
           git merge upstream --no-edit || true  # Merge without commit message prompt
           
           if git diff --quiet origin/main; then
