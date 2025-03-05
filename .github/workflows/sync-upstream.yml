@@ -55,5 +55,4 @@ jobs:
           gh pr create --title "Include Upstream Changes" \
                        --body "Automatically syncing upstream changes from Y/main." \
                        --base main \
-                       --head "$BRANCH_NAME" \
-                       --label "automated"
+                       --head "$BRANCH_NAME" 
