@@ -16,7 +16,7 @@ jobs:
       - name: Checkout Repo X
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # Uses default GitHub Actions token
+          token: ${{ secrets.REPO_WRITE_TOKEN }}  # Uses default GitHub Actions token
           fetch-depth: 0  # Fetch all history to avoid merge conflicts
 
       - name: Add Upstream Remote and Fetch
@@ -25,15 +25,13 @@ jobs:
           git fetch upstream
 
       - name: Update Upstream Branch
-        env:
-          GH_TOKEN: ${{ secrets.REPO_WRITE_TOKEN }}
         run: |
           git checkout -B upstream upstream/main
           git push origin upstream --force
 
       - name: Check for Changes and Create PR
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.REPO_WRITE_TOKEN }}
         run: |
           git fetch origin main
           git checkout main
