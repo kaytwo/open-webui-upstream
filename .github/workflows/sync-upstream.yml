@@ -25,6 +25,8 @@ jobs:
           git fetch upstream
 
       - name: Update Upstream Branch
+        env:
+          GH_TOKEN: ${{ secrets.REPO_WRITE_TOKEN }}
         run: |
           git checkout -B upstream upstream/main
           git push origin upstream --force
