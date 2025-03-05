@@ -28,3 +28,27 @@ jobs:
         run: |
           git checkout -B upstream upstream/main
           git push origin upstream --force
+
+      - name: Check for Changes and Create PR
+        env:
+          GH_TOKEN: ${{ secrets.REPO_WRITE_TOKEN }}
+        run: |
+          # Configure Git identity
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          
+          git fetch origin main
+          git checkout -b temp-branch origin/main
+          
+          # Use rebase instead of merge
+          git rebase upstream/main || true
+          
+          if git diff --quiet origin/main; then
+            echo "No new changes. Exiting."
+            exit 0
+          fi
+          
+          gh pr create --title "Include Upstream Changes" \
+                       --body "Automatically syncing upstream changes from open-webui/main." \
+                       --base main \
+                       --head upstream
