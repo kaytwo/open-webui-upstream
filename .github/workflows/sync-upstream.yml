@@ -47,6 +47,8 @@ jobs:
             echo "No new changes. Exiting."
             exit 0
           fi
+
+          gh repo set-default kaytwo/open-webui
           
           gh pr create --title "Include Upstream Changes" \
                        --body "Automatically syncing upstream changes from open-webui/main." \
